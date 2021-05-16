@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c99106f8c3bd486fa5006d8e6d4664ed" Name="Diagram1">
+        <EntityTypeShape EntityType="CDCNPMModel.ACC_TRANSACTION" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.ACCOUNT" Width="1.5" PointX="6" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.BRANCH" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.BUSINESS" Width="1.5" PointX="6" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.CUSTOMER" Width="1.5" PointX="3.75" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.DEPARTMENT" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.EMPLOYEE" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.INDIVIDUAL" Width="1.5" PointX="6" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.OFFICER" Width="1.5" PointX="6" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.PRODUCT" Width="1.5" PointX="3.75" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CDCNPMModel.PRODUCT_TYPE" Width="1.5" PointX="1.5" PointY="14.875" IsExpanded="true" />
+        <AssociationConnector Association="CDCNPMModel.ACC_TRANSACTION_ACCOUNT_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.ACC_TRANSACTION_BRANCH_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.ACC_TRANSACTION_EMPLOYEE_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.ACCOUNT_BRANCH_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.ACCOUNT_CUSTOMER_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.ACCOUNT_EMPLOYEE_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.ACCOUNT_PRODUCT_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.EMPLOYEE_BRANCH_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.BUSINESS_EMPLOYEE_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.INDIVIDUAL_CUSTOMER_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.OFFICER_CUSTOMER_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.EMPLOYEE_DEPARTMENT_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.EMPLOYEE_EMPLOYEE_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="CDCNPMModel.PRODUCT_PRODUCT_TYPE_FK" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CDCNPMModel.View_Columns" Width="1.5" PointX="7.5" PointY="0.625" />
+        <EntityTypeShape EntityType="CDCNPMModel.View_Tables" Width="1.5" PointX="5.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

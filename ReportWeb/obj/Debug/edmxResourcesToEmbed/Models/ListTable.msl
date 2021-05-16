@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CDCNPMModelStoreContainer" CdmEntityContainer="CDCNPMEntities">
+    <EntitySetMapping Name="ACC_TRANSACTION">
+      <EntityTypeMapping TypeName="CDCNPMModel.ACC_TRANSACTION">
+        <MappingFragment StoreEntitySet="ACC_TRANSACTION">
+          <ScalarProperty Name="TXN_ID" ColumnName="TXN_ID" />
+          <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+          <ScalarProperty Name="FUNDS_AVAIL_DATE" ColumnName="FUNDS_AVAIL_DATE" />
+          <ScalarProperty Name="TXN_DATE" ColumnName="TXN_DATE" />
+          <ScalarProperty Name="TXN_TYPE_CD" ColumnName="TXN_TYPE_CD" />
+          <ScalarProperty Name="ACCOUNT_ID" ColumnName="ACCOUNT_ID" />
+          <ScalarProperty Name="EXECUTION_BRANCH_ID" ColumnName="EXECUTION_BRANCH_ID" />
+          <ScalarProperty Name="TELLER_EMP_ID" ColumnName="TELLER_EMP_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ACCOUNTs">
+      <EntityTypeMapping TypeName="CDCNPMModel.ACCOUNT">
+        <MappingFragment StoreEntitySet="ACCOUNT">
+          <ScalarProperty Name="ACCOUNT_ID" ColumnName="ACCOUNT_ID" />
+          <ScalarProperty Name="AVAIL_BALANCE" ColumnName="AVAIL_BALANCE" />
+          <ScalarProperty Name="CLOSE_DATE" ColumnName="CLOSE_DATE" />
+          <ScalarProperty Name="LAST_ACTIVITY_DATE" ColumnName="LAST_ACTIVITY_DATE" />
+          <ScalarProperty Name="OPEN_DATE" ColumnName="OPEN_DATE" />
+          <ScalarProperty Name="PENDING_BALANCE" ColumnName="PENDING_BALANCE" />
+          <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+          <ScalarProperty Name="CUST_ID" ColumnName="CUST_ID" />
+          <ScalarProperty Name="OPEN_BRANCH_ID" ColumnName="OPEN_BRANCH_ID" />
+          <ScalarProperty Name="OPEN_EMP_ID" ColumnName="OPEN_EMP_ID" />
+          <ScalarProperty Name="PRODUCT_CD" ColumnName="PRODUCT_CD" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BRANCHes">
+      <EntityTypeMapping TypeName="CDCNPMModel.BRANCH">
+        <MappingFragment StoreEntitySet="BRANCH">
+          <ScalarProperty Name="BRANCH_ID" ColumnName="BRANCH_ID" />
+          <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+          <ScalarProperty Name="CITY" ColumnName="CITY" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="STATE" ColumnName="STATE" />
+          <ScalarProperty Name="ZIP_CODE" ColumnName="ZIP_CODE" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BUSINESSes">
+      <EntityTypeMapping TypeName="CDCNPMModel.BUSINESS">
+        <MappingFragment StoreEntitySet="BUSINESS">
+          <ScalarProperty Name="INCORP_DATE" ColumnName="INCORP_DATE" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="STATE_ID" ColumnName="STATE_ID" />
+          <ScalarProperty Name="CUST_ID" ColumnName="CUST_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CUSTOMERs">
+      <EntityTypeMapping TypeName="CDCNPMModel.CUSTOMER">
+        <MappingFragment StoreEntitySet="CUSTOMER">
+          <ScalarProperty Name="CUST_ID" ColumnName="CUST_ID" />
+          <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+          <ScalarProperty Name="CITY" ColumnName="CITY" />
+          <ScalarProperty Name="CUST_TYPE_CD" ColumnName="CUST_TYPE_CD" />
+          <ScalarProperty Name="FED_ID" ColumnName="FED_ID" />
+          <ScalarProperty Name="POSTAL_CODE" ColumnName="POSTAL_CODE" />
+          <ScalarProperty Name="STATE" ColumnName="STATE" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DEPARTMENTs">
+      <EntityTypeMapping TypeName="CDCNPMModel.DEPARTMENT">
+        <MappingFragment StoreEntitySet="DEPARTMENT">
+          <ScalarProperty Name="DEPT_ID" ColumnName="DEPT_ID" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EMPLOYEEs">
+      <EntityTypeMapping TypeName="CDCNPMModel.EMPLOYEE">
+        <MappingFragment StoreEntitySet="EMPLOYEE">
+          <ScalarProperty Name="EMP_ID" ColumnName="EMP_ID" />
+          <ScalarProperty Name="END_DATE" ColumnName="END_DATE" />
+          <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+          <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+          <ScalarProperty Name="START_DATE" ColumnName="START_DATE" />
+          <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+          <ScalarProperty Name="ASSIGNED_BRANCH_ID" ColumnName="ASSIGNED_BRANCH_ID" />
+          <ScalarProperty Name="DEPT_ID" ColumnName="DEPT_ID" />
+          <ScalarProperty Name="SUPERIOR_EMP_ID" ColumnName="SUPERIOR_EMP_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="INDIVIDUALs">
+      <EntityTypeMapping TypeName="CDCNPMModel.INDIVIDUAL">
+        <MappingFragment StoreEntitySet="INDIVIDUAL">
+          <ScalarProperty Name="BIRTH_DATE" ColumnName="BIRTH_DATE" />
+          <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+          <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+          <ScalarProperty Name="CUST_ID" ColumnName="CUST_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OFFICERs">
+      <EntityTypeMapping TypeName="CDCNPMModel.OFFICER">
+        <MappingFragment StoreEntitySet="OFFICER">
+          <ScalarProperty Name="OFFICER_ID" ColumnName="OFFICER_ID" />
+          <ScalarProperty Name="END_DATE" ColumnName="END_DATE" />
+          <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+          <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+          <ScalarProperty Name="START_DATE" ColumnName="START_DATE" />
+          <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+          <ScalarProperty Name="CUST_ID" ColumnName="CUST_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRODUCTs">
+      <EntityTypeMapping TypeName="CDCNPMModel.PRODUCT">
+        <MappingFragment StoreEntitySet="PRODUCT">
+          <ScalarProperty Name="PRODUCT_CD" ColumnName="PRODUCT_CD" />
+          <ScalarProperty Name="DATE_OFFERED" ColumnName="DATE_OFFERED" />
+          <ScalarProperty Name="DATE_RETIRED" ColumnName="DATE_RETIRED" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="PRODUCT_TYPE_CD" ColumnName="PRODUCT_TYPE_CD" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRODUCT_TYPE">
+      <EntityTypeMapping TypeName="CDCNPMModel.PRODUCT_TYPE">
+        <MappingFragment StoreEntitySet="PRODUCT_TYPE">
+          <ScalarProperty Name="PRODUCT_TYPE_CD" ColumnName="PRODUCT_TYPE_CD" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="View_Columns">
+      <EntityTypeMapping TypeName="CDCNPMModel.View_Columns">
+        <MappingFragment StoreEntitySet="View_Columns">
+          <ScalarProperty Name="DOMAIN_NAME" ColumnName="DOMAIN_NAME" />
+          <ScalarProperty Name="DOMAIN_SCHEMA" ColumnName="DOMAIN_SCHEMA" />
+          <ScalarProperty Name="DOMAIN_CATALOG" ColumnName="DOMAIN_CATALOG" />
+          <ScalarProperty Name="COLLATION_NAME" ColumnName="COLLATION_NAME" />
+          <ScalarProperty Name="COLLATION_SCHEMA" ColumnName="COLLATION_SCHEMA" />
+          <ScalarProperty Name="COLLATION_CATALOG" ColumnName="COLLATION_CATALOG" />
+          <ScalarProperty Name="CHARACTER_SET_NAME" ColumnName="CHARACTER_SET_NAME" />
+          <ScalarProperty Name="CHARACTER_SET_SCHEMA" ColumnName="CHARACTER_SET_SCHEMA" />
+          <ScalarProperty Name="CHARACTER_SET_CATALOG" ColumnName="CHARACTER_SET_CATALOG" />
+          <ScalarProperty Name="DATETIME_PRECISION" ColumnName="DATETIME_PRECISION" />
+          <ScalarProperty Name="NUMERIC_SCALE" ColumnName="NUMERIC_SCALE" />
+          <ScalarProperty Name="NUMERIC_PRECISION_RADIX" ColumnName="NUMERIC_PRECISION_RADIX" />
+          <ScalarProperty Name="NUMERIC_PRECISION" ColumnName="NUMERIC_PRECISION" />
+          <ScalarProperty Name="CHARACTER_OCTET_LENGTH" ColumnName="CHARACTER_OCTET_LENGTH" />
+          <ScalarProperty Name="CHARACTER_MAXIMUM_LENGTH" ColumnName="CHARACTER_MAXIMUM_LENGTH" />
+          <ScalarProperty Name="DATA_TYPE" ColumnName="DATA_TYPE" />
+          <ScalarProperty Name="IS_NULLABLE" ColumnName="IS_NULLABLE" />
+          <ScalarProperty Name="COLUMN_DEFAULT" ColumnName="COLUMN_DEFAULT" />
+          <ScalarProperty Name="ORDINAL_POSITION" ColumnName="ORDINAL_POSITION" />
+          <ScalarProperty Name="COLUMN_NAME" ColumnName="COLUMN_NAME" />
+          <ScalarProperty Name="TABLE_NAME" ColumnName="TABLE_NAME" />
+          <ScalarProperty Name="TABLE_SCHEMA" ColumnName="TABLE_SCHEMA" />
+          <ScalarProperty Name="TABLE_CATALOG" ColumnName="TABLE_CATALOG" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="View_Tables">
+      <EntityTypeMapping TypeName="CDCNPMModel.View_Tables">
+        <MappingFragment StoreEntitySet="View_Tables">
+          <ScalarProperty Name="TABLE_TYPE" ColumnName="TABLE_TYPE" />
+          <ScalarProperty Name="TABLE_NAME" ColumnName="TABLE_NAME" />
+          <ScalarProperty Name="TABLE_SCHEMA" ColumnName="TABLE_SCHEMA" />
+          <ScalarProperty Name="TABLE_CATALOG" ColumnName="TABLE_CATALOG" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

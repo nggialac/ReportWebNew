@@ -1,0 +1,32 @@
+﻿
+
+@{
+    ViewBag.Title = "DisplayReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="d-flex justify-content-center">
+    <h2>DisplayReport</h2>
+</div>
+
+
+<div class="d-flex justify-content-center">
+    @Html.ActionLink("Back to Input", "Index")
+</div>
+
+@{
+    XtraReport report = (XtraReport)ViewBag.report;
+}
+
+
+@Html.DevExpress().WebDocumentViewer(settings =>
+{
+    settings.Name = "WebDocumentViewer2";
+}).Bind(report).GetHtml()
+
+
+
+
+
+
+
+

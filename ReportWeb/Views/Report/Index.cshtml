@@ -1,0 +1,838 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+<style>
+    .main-menu{
+        font-family: 'Ubuntu', sans-serif;
+        font-size: 116%;
+    }
+
+    .col{
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+
+    .tableSelected, .columnSelected, .conditionA, .conditionB, .statisSelected, .sortSelected {
+    }
+
+    #queryText{
+        background: #f6f6f6;
+    }
+
+    .message{
+
+    }
+
+    .table{
+        margin-bottom: 0px;
+    }
+
+    .rowAt{
+        margin-bottom: 30px;
+    }
+
+    .main{
+        justify-content: center;
+        align-content: center;
+    }
+
+    .buttons{
+        margin-bottom: 50px;
+        margin-top: 50px;
+    }
+
+    .btn{
+        margin-left: 28px;
+        margin-right: 28px;
+    }
+
+    .check-show {
+        font-size: 8px;
+    }
+
+    .head-generate{
+        background: #a0b1f1;
+        margin-top: 50px;
+    }
+
+    .buttonEdit{
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+</style>
+
+<div class="container-fluid main-menu">
+    <div>
+        <h2 class="d-flex justify-content-center">Input</h2>
+    </div>
+
+
+    <div class="database d-flex justify-content-center">
+        <select class="form-select form-select-lg" id="databaseSelected" onChange="addDB(); validateDB();" aria-label=".form-select-lg example"></select>
+    </div>
+    <div class="d-flex justify-content-center" style="color: red; margin-top: 5px;"> 
+        <div class="selectDB">
+            Select Database to Continue!
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center buttons">
+        <button class="btn btn-primary" onClick="addSelect(); showQueryText();" id="addColumn">Adding Column</button>
+        <button class="btn btn-danger" onClick="removeSelect(); showQueryText();">Remove Column</button>
+        <button id="btnCheck" class="btn btn-info" onclick="checkQuery(); isValid();">Check</button>
+    </div>
+    <div class="buttonEdit">
+        <button id="btnBack" class="btn btn-secondary" onclick="hideDetailReport();">Back To Edit</button>
+    </div>
+
+    <div>
+        <div class="container" id="input-rows">
+            <div class="row row-cols-5" id="querySelected">
+                <div class="col text-query">
+                    <label class="col">TABLE</label>
+                    <label class="col">COLUMN</label>
+                    <label class="col" style="margin-top: 4px;">CONDITION A</label>
+                    <label class="col" style="margin-top: 6px;">OR CONDITION B</label>
+                    <label class="col" style="margin-top: 6px;">STATIS</label>
+                    <label class="col" style="margin-top: 4px;">SORT</label>
+                    <label class="col" style="margin-top: 10px;">SHOW</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formId" }))
+    {
+        <div class="" id="detailForm">
+            <div class="">
+                <form class="container">
+                    <div class="form-group col-xs-4">
+                        <p>
+                            <label>Query</label>
+                            <input class="form-control" type="text" id="query" name="Query" placeholder="Query" readonly/>
+                        </p>
+                    </div>
+                    <div class="form-group col-xs-4">
+                        <p>
+                            <label>Title</label>
+                            <input class="form-control" type="text" id="title" name="Title" placeholder="Title" />
+                        </p>
+                    </div>
+
+                    <div id="radioType" class="form-group col-xs-4"> Type: 
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="Type" value="vertical"> Vertical
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="Type" value="horizontal"> Horizontal
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="radioWatermark" class="form-group col-xs-4"> Watermark: 
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="Watermark" value="text"> Text
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="Watermark" value="image"> Image
+                            </label>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <p>
+                            <input type="submit" value="Submit" class="btn btn-primary btnSub"  />
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+    <div class="container d-flex justify-content-center head-generate"><div id="generateQuery">Generated Query</div></div>
+    <div id="queryText" class="container d-flex justify-content-center">
+            <div class="message" id="mess">
+                <span id="select" class="Select"> SELECT </span>
+                <span id="from" class="From"> FROM </span>
+                <span id="where" class="Where"> </span>
+                <span id="groupby" class="GroupBy">  </span>
+                <span id="having" class="Having">  </span>
+                <span id="orderby" class="OrderBy">  </span>
+            </div>
+    </div>
+</div>
+
+<script>
+    var count = 0;
+    var selectLength = $("#select > p").length
+    var fromLength = $("#from > p").length;
+    var orderbyLength = $("#orderby > p").length;
+    var whereALength = $("#where > .where-conditionA").length;
+    var whereBLength = $("#where > .where-conditionA").length;
+
+    var resultStatis;
+    var allSelect = [];
+    var allFrom = [];
+    var allOrderBy = [];
+    var allConditionA = [];
+    var allConditionB = [];
+    var allStatis = [];
+    var allChecked = [];
+    var statisArr = ["", "MIN", "MAX", "COUNT", "SUM", "AVERAGE"];
+    var sortArr = ["", "ASC", "DESC"];
+    var condition = ["", "AND", "OR", "NOT"];
+    var passingCon = false;
+    var passingHave = false;
+
+    
+
+    function getStatisArr(t) {
+        $.each(statisArr, function (index, item) {
+            $('#statisSelected' + t + '')
+                .append($("<option></option>")
+                    .attr("value", item)
+                    .text(item));
+        });
+    }
+
+    function getSortArr(t) {
+        $.each(sortArr, function (index, item) {
+            $('#sortSelected' + t + '')
+                .append($("<option></option>")
+                    .attr("value", item)
+                    .text(item));
+        });
+    }
+
+    function getChangeAllElements() {
+        var allSelect = [];
+        var test = $('#querySelected > select, #querySelected > input');
+        $(test).change(function () {
+            allSelect = [];
+            $(test).each(function (index, item) {
+                allSelect.push(item.value);
+                //query += item.value;
+            });
+        });
+    }
+
+    function getChangeColumnElements() {
+        let test = $(".column");
+        let statis = $(".statis");
+        let table = $(".table");
+        let show = $(".check-show");
+        $("#select > p").remove();
+        allSelect = [];
+        allChecked = [];
+        let isGroupBy = [];
+        let isStatis = [];
+
+        //COLUMN
+
+        $(show).each(function (index, item) {
+            if ($("#show" + index + "").is(":checked")) {
+                allChecked.push(item.value);
+            } else if (!$("#show" + index + "").is(":checked")) {
+                allChecked.push("");
+            }
+        })
+
+        $(test).each(function (index, item) {
+            if (item.value !== "") {
+                if (allChecked[index] !== "")
+                    allSelect.push(item.value);
+                else
+                    allSelect.push("");
+            }
+        });
+        $(table).each(function (index, item) {
+            if (item.value !== "") {
+                if (allChecked[index] !== "")
+                    allSelect[index] = item.value + "." + allSelect[index];
+            }
+        });
+        //STATIS
+        let isHavingStatis = 0;
+        $(statis).each(function (index, item) {
+            if (item.value !== "") {
+                if (allChecked[index] !== ""){
+                    allSelect[index] = item.value + "(" + allSelect[index] + ")";
+                }
+                isHavingStatis++;
+            } else if(item.value === "") {
+                isGroupBy[index] = allSelect[index];
+            }
+        });
+        let checkGroupBy = isGroupBy.some(function (e) {
+            return e !== "";
+        });
+        if (isGroupBy && checkGroupBy && isHavingStatis!==0) {
+            $("#groupby").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = " GROUP BY ";
+        } else {
+            $("#groupby").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = "";
+        }
+
+        let uniqueSet = new Set(allSelect);
+        resultStatis = [...uniqueSet];
+
+        var filteredAry = resultStatis.filter(e => e !== "")
+        //console.log(resultStatis);
+        if (!selectLength) {
+            $("#select").append('<p class="selectColumn">' + filteredAry + '</p>');
+        } else ($("#select > p").text(filteredAry));
+        /////GROUPBY
+        var fil = isGroupBy.filter(e => e !== "")
+        if (checkGroupBy && isHavingStatis!==0) {
+            if (!$("#groupby > .select-groupby").length) $("#groupby").append('<p class="select-groupby">' + fil + '</p>');
+            else ($("#groupby > .select-groupby").text(fil));
+        }
+    }
+
+    function getChangeTableElements() {
+        let test = $(".table");
+        //$(test).change(function () {
+            $("#from > p").remove();
+            allFrom = [];
+            $(test).each(function (index, item) {
+                allFrom.push(item.value);
+            });
+            if (!fromLength) {
+                let uniqueSet = new Set(allFrom);
+                let result = [...uniqueSet];
+                var fil = result.filter(e => e !== "")
+                $("#from").append('<p class="selectTable">' + fil + '</p>');
+            } else ($("#from > p").text(fil));
+        //});
+    }
+
+    function getChangeSortElements() {
+        let sort = $(".sort");
+        let column = $(".column");
+        let table = $(".table");
+        let statis = $(".statis");
+
+        allOrderBy = [];
+        allTemp = [];
+        $(sort).each(function (index, item) {
+                allOrderBy.push(item.value);
+        });
+
+        let checkOrderBy= allOrderBy.some(function (e) {
+            return e !== "";
+        });
+        if (checkOrderBy && sort.length) {
+            $("#orderby").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = " ORDER BY ";
+        } else {
+            $("#orderby > p").remove();
+            $("#orderby").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = "";
+        }
+
+        if (allOrderBy.length) {
+            $(column).each(function (index, item) {
+                if (item.value !== "" && index < allOrderBy.length && allOrderBy[index] !== "") {
+                    allTemp[index] = item.value;
+                }
+            });
+            $(table).each(function (index, item) {
+                if (item.value !== "" && index < allOrderBy.length && allOrderBy[index] !== "") {
+                    allTemp[index] = item.value + "." + allTemp[index];
+                }
+            });
+            $(statis).each(function (index, item) {
+                if (item.value === "" && index < allOrderBy.length && allOrderBy[index] !== "") allTemp[index] = allTemp[index] + " " + allOrderBy[index];
+                if (item.value !== "" && index < allOrderBy.length && allOrderBy[index] !== "") {
+                    allTemp[index] = item.value + "(" + allTemp[index] + ") " + allOrderBy[index];
+                }
+                console.log(allTemp);
+                console.log(allOrderBy);
+            });
+
+            var fil = allTemp.filter(e => e !== "")
+            if (!$("#orderby > p").length) {
+                $("#orderby").append('<p class="select-orderby">' + fil + '</p>');
+            } else ($("#orderby > p").text(fil));
+        }
+    }
+
+    function getConditionAElements() {
+        let conditionA = $(".conditionA");
+        let conditionB = $(".conditionB");
+        let havingCheck = $(".having-conditionA")
+        //passingHave = false;
+        
+        $("#where > .where-conditionA").remove();
+        getConditionBElements();
+        
+        
+        let column = $(".column");
+        let table = $(".table");
+        let statis = $(".statis");
+        let sort = $(".sort");
+        allConditionA = [];
+        allConditionB = [];
+        allFrom = [];
+        allSelect = [];
+        allStatis = [];
+        isHaving = [];
+        isWhere = [];
+        isGroupBy = [];
+        
+        $(conditionB).each(function (index, item) {
+            allConditionB.push(item.value);
+        });
+        $(conditionA).each(function (index, item) {
+            allConditionA.push(item.value);
+        });
+        $(table).each(function (index, item) {
+            allFrom.push(item.value);
+        });
+        $(statis).each(function (index, item) {
+            allStatis.push(item.value);
+        });
+        let num1 = 0;
+        let num2 = 0;
+        if (allConditionA.length > 0) {
+            $(column).each(function (index, item) {
+                if (allStatis[index] !== '' && allConditionA[index] !== '') {
+                    if (item.value !== "" && num1===0) {
+                        isHaving[index] = allStatis[index] + "(" + allFrom[index] + "." + item.value + ") " + allConditionA[index] + "";
+                    }
+                    else if (item.value !== "" && num1 > 0) {
+                        isHaving[index] = " AND " + allStatis[index] + "(" + allFrom[index] + "." + item.value + ") " + allConditionA[index] + "";
+                    }
+                    num1++;
+                }
+                if (allStatis[index] === '' && allConditionA[index] !== '') {
+                    if (item.value !== "" && num2===0) {
+                        isWhere[index] = allFrom[index] + "." + item.value + " " + allConditionA[index] + "";
+                    }
+                    else if (item.value !== "" && num2 > 0) {
+                        isWhere[index] = " AND " + allFrom[index] + "." + item.value + " " + allConditionA[index] + "";
+                    }
+                    num2++;
+                }
+            });
+        }
+        let checkConA = allConditionA.some(function (e) {
+            return e !== "";
+        });
+        let checkConB = allConditionB.some(function (e) {
+            return e !== "";
+        });
+        if (conditionA.length || conditionB.length) {
+            let checkWhere = isWhere.some(function (e) {
+                return e !== "";
+            });
+            passingCon = checkWhere;
+            if (isWhere.length && checkWhere) {
+                $("#where").contents().filter(function () {
+                    return this.nodeType === 3;
+                })[0].nodeValue = " WHERE ";
+            } else {
+                $("#where").contents().filter(function () {
+                    return this.nodeType === 3;
+                })[0].nodeValue = "";
+            }
+
+            let checkStatis = allStatis.some(function (e) {
+                return e !== "";
+            });
+            let checkHaving = isHaving.some(function (e) {
+                return e !== "";
+            });
+            passingHave = checkHaving;
+            if (allStatis.length && checkStatis) {
+                if (checkConA && isHaving.length || checkConB && isHaving.length) {
+                    $("#having").contents().filter(function () {
+                        return this.nodeType === 3;
+                    })[0].nodeValue = " HAVING ";
+                } else {
+                    $("#having").contents().filter(function () {
+                        return this.nodeType === 3;
+                    })[0].nodeValue = "";
+                }
+            }                
+        } else {
+            $("#where").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = "";
+            $("#having").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = "";
+
+            $("#groupby").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = "";
+        }
+
+        if (!$("#where > .where-conditionA").length) $("#where").append('<p class="where-conditionA">' + isWhere.join('') + '</p>');
+        else ($("#where > .where-conditionA").text(isWhere.join('')));
+
+        if (!$("#having > .having-conditionA").length) $("#having").append('<p class="having-conditionA">' + isHaving.join('') + '</p>');
+        else ($("#having > .having-conditionA").text(isHaving.join('')));
+
+        getConditionBElements();
+    }
+
+    function getConditionBElements() {
+        let conditionA = $(".conditionA");
+        let conditionB = $(".conditionB");
+        let havingCheck = $(".having-conditionB")
+        $("#where > .where-conditionB").remove();
+        
+        let column = $(".column");
+        let table = $(".table");
+        let statis = $(".statis");
+        let sort = $(".sort");
+        allConditionB = [];
+        allConditionA = [];
+        allFrom = [];
+        allSelect = [];
+        allStatis = [];
+        isHaving = [];
+        isWhere = [];
+        isGroupBy = [];
+
+        $(conditionA).each(function (index, item) {
+            allConditionA.push(item.value);
+        });
+        $(conditionB).each(function (index, item) {
+            allConditionB.push(item.value);
+        });
+        $(table).each(function (index, item) {
+            allFrom.push(item.value);
+        });
+        $(statis).each(function (index, item) {
+            allStatis.push(item.value);
+        });
+
+        let num1 = 0;
+        let num2 = 0;
+
+        if (allConditionB.length > 0) {
+            $(column).each(function (index, item) {
+                if (allStatis[index] !== '' && allConditionB[index] !== '') {
+                    if (item.value !== "" && num1 === 0) {
+                        isHaving[index] = allStatis[index] + "(" + allFrom[index] + "." + item.value + ") " + allConditionB[index] + "";
+                    }
+                    else if (item.value !== "" && num1 > 0) {
+                        isHaving[index] = " AND " + allStatis[index] + "(" + allFrom[index] + "." + item.value + ") " + allConditionB[index] + "";
+                    }
+                    num1++;
+                }
+                if (allStatis[index] === '' && allConditionB[index] !== '') {
+                    if (item.value !== "" && num2 === 0) {
+                        isWhere[index] = allFrom[index] + "." + item.value + " " + allConditionB[index] + "";
+                    }
+                    else if (item.value !== "" && num2 > 0) {
+                        isWhere[index] = " AND " + allFrom[index] + "." + item.value + " " + allConditionB[index] + "";
+                    }
+                    num2++;
+                }
+            });
+        }
+        //CON - A
+        let checkConB = allConditionB.some(function (e) {
+            return e !== "";
+        });
+        let checkConA = allConditionA.some(function (e) {
+            return e !== "";
+        });
+        if (conditionA.length || conditionB.length) {
+            let checkWhere = isWhere.some(function (e) {
+                return e !== "";
+            });
+            if (isWhere.length && checkWhere || passingCon === true) {
+                $("#where").contents().filter(function () {
+                    return this.nodeType === 3;
+                })[0].nodeValue = " WHERE ";
+            } else {
+                $("#where").contents().filter(function () {
+                    return this.nodeType === 3;
+                })[0].nodeValue = "";
+            }
+
+            let checkStatis = allStatis.some(function (e) {
+                return e !== "";
+            });
+            let checkHaving = isHaving.some(function (e) {
+                return e !== "";
+            });
+            if (allStatis.length && checkStatis) {
+                if (checkConB && isHaving.length>0 || checkConA && isHaving.length>0 || passingHave) {
+                    $("#having").contents().filter(function () {
+                        return this.nodeType === 3;
+                    })[0].nodeValue = " HAVING ";
+                } else {
+                    $("#having").contents().filter(function () {
+                        return this.nodeType === 3;
+                    })[0].nodeValue = "";
+                }
+            } else {
+                $("#having").contents().filter(function () {
+                    return this.nodeType === 3;
+                })[0].nodeValue = "";
+            }
+        } else {
+            $("#where").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = "";
+            $("#having").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = "";
+            $("#groupby").contents().filter(function () {
+                return this.nodeType === 3;
+            })[0].nodeValue = "";
+        }
+
+        ////
+        let checkWhere = isWhere.some(function (e) {
+            return e !== "";
+        });
+        if ($("#where > .where-conditionA").text() && checkWhere) {
+            $("#where > .where-conditionB").remove();
+            $(".where-conditionA").after('<p class="where-conditionB"> OR ' + isWhere.join('') + '</p>');
+        } else {
+            if (!$("#where > .where-conditionB").length) $("#where").append('<p class="where-conditionB">' + isWhere.join('') + '</p>');
+            else ($("#where > .where-conditionB").text(isWhere.join('')));
+        }
+
+        let checkHaving = isHaving.some(function (e) {
+            return e !== "";
+        });
+        if ($("#having > .having-conditionA").text() && checkHaving) {
+            $("#having > .having-conditionB").remove();
+            $(".having-conditionA").after('<p class="having-conditionB"> OR ' + isHaving.join('') + '</p>');
+        } else {
+            if (!$("#having > .having-conditionB").length) $("#having").append('<p class="having-conditionB">' + isHaving.join('') + '</p>');
+            else ($("#having > .having-conditionB").text(isHaving.join('')));
+        }
+    }
+    
+    function selectFields(t) {
+        let id = t.id;
+        let lastChar = id.substr(id.length - 1);
+         //Get table change
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Report/getColumnList",
+                data: { TABLE_NAME: $("#"+id+"").val() },
+                success: function (data) {
+                    $("#columnSelected" + lastChar + "").empty();
+                    $.each(data, function (index, row) {
+                        $("#columnSelected" + lastChar + "").append("<option value='" + row.Value + "'>" + row.Text + "</option>")
+                    })
+                    getChangeColumnElements();
+                }
+            });
+        })
+    }
+
+    function addSelect() {
+        $('#querySelected').append('<div class="col rowAt" id="row-at' + count + '"></div>');
+        $('#row-at' + count + '').append('<select class="form-select col table" name="Table" id="tableSelected' + count + '" onChange="selectFields(this);getChangeTableElements();"></select>');
+        $('#row-at' + count + '').append('<select class="form-select col column" name="Column" id="columnSelected' + count + '" onChange="getChangeColumnElements();getChangeSortElements();getConditionAElements();getConditionBElements();"></select>');
+        $('#row-at' + count + '').append('<input placeholder="Condition 1" type="text" class="form-control col conditionA" name="ConditionA" id="conditionInputA' + count + '" onkeyup="getConditionAElements()"></input>');
+        $('#row-at' + count + '').append('<input placeholder="Condition 2" type="text" class="form-control col conditionB" name="ConditionB" id="conditionInputB' + count + '" onkeyup="getConditionBElements()"></input>');
+        $('#row-at' + count + '').append('<select class="form-select col statis" name="Statis" id="statisSelected' + count + '" onChange="getChangeColumnElements();getConditionAElements();getChangeSortElements();"></select>');
+        $('#row-at' + count + '').append('<select class="form-select col sort" name="Sort" id="sortSelected' + count + '" onChange="getChangeSortElements()"></select>');
+        $('#row-at' + count + '').append('<input type="checkbox" class="form-control col check-show" onClick="getChangeColumnElements()" value="setChecked" id="show' + count + '" checked ></input>');
+        getStatisArr(count);
+        getSortArr(count);
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Report/getTableList", 
+                success: function (data) {
+                    $('#tableSelected' + count + '').empty();
+                    $.each(data, function (index, row) {
+                        $('#tableSelected'+count+'').append("<option value='" + row.Value + "'>" + row.Text + "</option>")
+                    })
+                    count++;
+                    //console.log(count);
+                }
+            });
+        })
+    }
+
+    function addDB() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Report/getStrConnect",
+                data: { name: $("#databaseSelected").val() },
+                success: function (res) {
+                    //alert(res);
+                    //console.log($("#databaseSelected").val());
+                    while (count > 0) {
+                        removeSelect();
+                        //console.log(count);
+                    }
+                }
+            });
+        })
+    }
+
+    function removeSelect() {
+        if (count <= 0) {
+            alert("Nothing to delete!");
+        }
+        else {
+            count--;
+            $('#row-at' + count + '').remove();
+            $('#tableSelected' + count + '').remove();
+            $('#columnSelected' + count + '').remove();
+            $('#conditionInputA' + count + '').remove();
+            $('#conditionInputB' + count + '').remove();
+            $('#statisSelected' + count + '').remove();
+            $('#sortSelected' + count + '').remove();
+
+            getChangeTableElements();
+            getChangeColumnElements();
+            getConditionAElements();
+            getConditionBElements();
+            getChangeSortElements();
+            getChangeSortElements();
+        }
+    }
+
+    function checkQuery() {
+        var mes="";
+        let query = $('#mess').find('*').contents().filter(function () { return this.nodeType === 3; });
+        query.each(function () {
+            console.log(this);
+            mes += this.data + '';
+        })
+        $("#query").val(mes);
+    }
+
+    
+
+</script>
+
+<script>
+    $(".btn, .btn-primary").prop('disabled', true);
+    $(".btn-secondary").hide();
+    $(".message").hide();
+    $("#detailForm").hide();
+    $("#querySelected").hide();
+    $("#generateQuery").hide();
+    $(".selectDB").show();
+
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Report/getDatabaseList",
+            success: function (data) {
+                console.log(data);
+                $.each(data, function (index, row) {
+                    $('#databaseSelected').append("<option value='" + row.Value + "'>" + row.Text + "</option>")
+                })
+            }
+        });
+    })
+
+    function isValid() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Report/testValid",
+                data: { testString: $("#query").val() },
+                success: function (e) {
+
+                    if (e === "Success!") {
+                        alert(e);
+                        showDetailReport();
+                    } else {
+                        alert("Select fail!");
+                    }
+                },
+                error: function (ex) {
+                    //alert("Select Fail!");
+                }
+            });
+        })
+    }
+
+    function validateDB() {
+        if ($("#databaseSelected").val() !== "" || $("#databaseSelected").val()) {
+            $(".btn, .btn-primary").prop('disabled', false);
+            $(".selectDB").hide();
+            $(".message").hide();
+            $("#querySelected").hide();
+            $("#generateQuery").hide();
+        } else {
+            $(".btn, .btn-primary").prop('disabled', true);
+            $(".selectDB").show();
+            $(".message").hide();
+            $("#querySelected").hide();
+            $("#generateQuery").hide();
+        }
+    }
+
+    function showDetailReport() {
+        $("#detailForm").show();
+        $(".message").hide();
+        $("#querySelected").hide();
+        $(".btn").hide();
+        $("#generateQuery").hide();
+        $(".btnSub").show();
+        $(".btn-secondary").show();
+    }
+
+    function hideDetailReport() {
+        $("#detailForm").hide();
+        $(".message").show();
+        $("#querySelected").show();
+        $(".btn").show();
+        $("#generateQuery").show();
+        $(".btnSub").hide();
+        $(".btn-secondary").hide();
+    }
+
+    function showQueryText() {
+        $(".message").show();
+        $("#querySelected").show();
+        $("#generateQuery").show();
+    }
+
+        //let a = $('input[name=Type]:checked', '#formId').val();
+        //let b = $('input[name=Watermark]:checked', '#formId').val();
+        //if (!a && !b || !a && b || a && !b) // here you check your drop down selected value
+        //{
+        //    alert("Please check your selection!");
+        //    var form = document.getElementById('formId');
+        //    form.addEventListener('submit', function (e) {
+        //        e.preventDefault();
+        //    });
+        //}
+
+        var form = $('#formId');
+        form.on('submit', function (e) {
+        let a = $('input[name=Type]:checked', '#formId').val();
+        let b = $('input[name=Watermark]:checked', '#formId').val();
+        
+        console.log(a);
+        console.log(b);
+            if (!a && !b || !a && b || a && !b) // here you check your drop down selected value
+            {
+                alert("Please check your selection!");
+                e.preventDefault();
+            }
+        });
+   
+</script>
